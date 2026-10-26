@@ -1,0 +1,20 @@
+SIMULATED HTTP DEMONSTRATIONS — no live model requests or measured latency
+
+SCENARIO: Routine
+SYNTHETIC PATIENT MESSAGE: I have a mild cough today.
+SOURCE: cloud [SIMULATED]
+{'is_critical_emergency': False, 'detected_symptoms': ['mild cough'], 'clinical_reasoning_summary': 'Only a mild cough is reported; additional clinical context may be needed.', 'routing_destination': 'ROUTINE_CARE'}
+ROUTING: ROUTINE_CARE
+
+SCENARIO: Potential pregnancy emergency
+SYNTHETIC PATIENT MESSAGE: I am pregnant with a severe headache and blurred vision.
+SOURCE: cloud [SIMULATED]
+{'is_critical_emergency': True, 'detected_symptoms': ['pregnancy', 'severe headache', 'blurred vision'], 'clinical_reasoning_summary': 'Pregnancy with a reported severe headache and visual changes warrants emergency assessment.', 'routing_destination': 'EMERGENCY_SERVICES'}
+ROUTING: EMERGENCY_SERVICES
+
+SCENARIO: Cloud HTTP 503 -> local fallback
+SYNTHETIC PATIENT MESSAGE: I have crushing chest pain and cannot breathe.
+[status] cloud unavailable (HTTPStatusError)
+SOURCE: ollama_fallback [SIMULATED]
+{'is_critical_emergency': True, 'detected_symptoms': ['crushing chest pain', 'difficulty breathing'], 'clinical_reasoning_summary': 'Reported crushing chest pain and breathing difficulty are emergency warning signs.', 'routing_destination': 'EMERGENCY_SERVICES'}
+ROUTING: EMERGENCY_SERVICES
